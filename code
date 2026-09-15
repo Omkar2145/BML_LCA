@@ -1,0 +1,69 @@
+1) !pip install ucimlrepo scikit-learn pandas
+  This is firstly used for downoading the required libraries.
+
+2) from ucimlrepo import fetch_ucirepo
+from sklearn.model_selection import train_test_split
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.metrics import accuracy_score, confusion_matrix, classification_report
+
+breast_cancer = fetch_ucirepo(id=17)
+
+X = breast_cancer.data.features
+y = breast_cancer.data.targets
+
+y = y.iloc[:, 0].map({'M': 1, 'B': 0})
+
+X_train, X_test, y_train, y_test = train_test_split(
+    X,
+    y,
+    test_size=0.20,
+    random_state=42,
+    stratify=y
+)
+
+model = DecisionTreeClassifier(
+    criterion='gini',
+    random_state=42
+)
+
+model.fit(X_train, y_train)
+
+y_pred = model.predict(X_test)
+
+accuracy = accuracy_score(y_test, y_pred)
+
+print("Training samples:", len(X_train))
+print("Testing samples:", len(X_test))
+print("\nAccuracy:", accuracy)
+print("Accuracy (%):", accuracy * 100)
+
+print("\nConfusion Matrix:")
+print(confusion_matrix(y_test, y_pred))
+
+print("\nClassification Report:")
+print(classification_report(
+    y_test,
+    y_pred,
+    target_names=["Benign", "Malignant"]
+))
+
+This code is used for loading and training the model..
+  Output of this will be attached.
+
+3) from sklearn.tree import plot_tree
+import matplotlib.pyplot as plt
+
+plt.figure(figsize=(20, 10))
+
+plot_tree(
+    model,
+    feature_names=X.columns,
+    class_names=["Benign", "Malignant"],
+    filled=True,
+    max_depth=3
+)
+
+plt.show()
+
+This is the code for the decision tree.
+ This output will be attached.
